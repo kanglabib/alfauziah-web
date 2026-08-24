@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useParams, notFound } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { BookOpen, Award, GraduationCap, CheckCircle2, ArrowLeft, Image as ImageIcon, Sparkles } from 'lucide-react';
 
 // Data Detail Masing-Masing Program + Galeri Foto

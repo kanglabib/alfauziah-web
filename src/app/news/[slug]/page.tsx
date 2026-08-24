@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { Calendar, User, ArrowLeft, Tag, Share2 } from 'lucide-react';
+import { Calendar, User, ArrowLeft, Share2 } from 'lucide-react';
 import { NEWS_DATA } from '../page';
 
 export default function NewsDetailPage() {

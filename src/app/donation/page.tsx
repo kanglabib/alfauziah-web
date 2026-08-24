@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Heart, Copy, Check, Building2, Calculator, Sparkles, ShieldCheck } from 'lucide-react';
+import { Heart, Copy, Check, Building2, Calculator, ShieldCheck } from 'lucide-react';
 
 export default function DonationPage() {
   const [selectedNominal, setSelectedNominal] = useState<number | null>(100000);

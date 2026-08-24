@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Calendar, User, ArrowRight, Search, Tag } from 'lucide-react';
+import { Calendar, User, ArrowRight, Search } from 'lucide-react';
 
 export interface NewsItem {
   slug: string;
