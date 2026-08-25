@@ -16,7 +16,7 @@ export default function Footer() {
           {/* Tombol Media Sosial */}
           <div className="flex items-center space-x-3">
             <a
-              href="https://instagram.com/alfauziah" // Ganti sesuai username Instagram pondok
+              href="https://instagram.com/alfauziahofficial"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
