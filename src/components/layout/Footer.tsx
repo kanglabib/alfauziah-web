@@ -43,7 +43,7 @@ export default function Footer() {
               <Facebook className="w-5 h-5" />
             </a>
             <a
-              href="https://wa.me/6281234567890" // Ganti nomor WA (gunakan awalan 62)
+              href="https://wa.me/6285849468473"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
@@ -79,9 +79,9 @@ export default function Footer() {
         <div>
           <h4 className="font-semibold mb-4 text-[#D4AF37]">Kontak</h4>
           <p className="text-sm text-gray-200 leading-relaxed">
-            Jl. Pesantren No. 1, Bogor, Jawa Barat<br />
+            Jl. H. Miing, RT.003/RW.003, Mekarsari, Kec. Ranca Bungur, Kabupaten Bogor, Jawa Barat 16310<br />
             Email: info@alfauziah.sch.id<br />
-            Telp: +62 812-3456-7890
+            Telp: +62 858-4946-8473
           </p>
         </div>
 
