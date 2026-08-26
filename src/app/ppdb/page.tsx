@@ -1,25 +1,64 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CheckCircle2, FileText, Send, Calendar, HelpCircle, DollarSign } from 'lucide-react';
+import { CheckCircle2, FileText, Send, Calendar, HelpCircle, DollarSign, Loader2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export default function PPDBPage() {
   const [formData, setFormData] = useState({
     fullName: '',
     nisn: '',
-    gender: 'L',
+    gender: 'Laki-laki',
     program: 'MTs',
     parentName: '',
     whatsapp: '',
     address: '',
   });
 
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Di sini nantinya bisa disambungkan ke API backend / Database
-    setSubmitted(true);
+    setLoading(true);
+    setErrorMsg('');
+
+    try {
+      // Kirim data ke tabel ppdb_registrations di Supabase
+      const { error } = await supabase.from('ppdb_registrations').insert([
+        {
+          full_name: formData.fullName,
+          gender: formData.gender,
+          nisn: formData.nisn || null,
+          previous_school: formData.program, // Menyimpan program pilihan (MTs/MA/Tahfizh)
+          parent_name: formData.parentName,
+          whatsapp_number: formData.whatsapp,
+          address: formData.address,
+          birth_place: '-', // Nilai default jika tidak ada input tempat lahir
+          birth_date: new Date().toISOString().split('T')[0], // Tanggal pendaftaran sebagai default
+        },
+      ]);
+
+      if (error) throw error;
+
+      setSubmitted(true);
+      // Reset formulir
+      setFormData({
+        fullName: '',
+        nisn: '',
+        gender: 'Laki-laki',
+        program: 'MTs',
+        parentName: '',
+        whatsapp: '',
+        address: '',
+      });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Gagal mengirim pendaftaran. Silakan coba lagi.';
+      setErrorMsg(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -34,7 +73,7 @@ export default function PPDBPage() {
             Penerimaan Santri Baru (PPDB)
           </h1>
           <p className="text-white/80 max-w-2xl mx-auto text-sm sm:text-base">
-            Bergabunglah menjadi bagian dari keluarga besar Pondok Pesantren Al Fauziah. Wujudkan generasi pencinta Al-Qur'an dan berprestasi.
+            Bergabunglah menjadi bagian dari keluarga besar Pondok Pesantren Al Fauziah. Wujudkan generasi pencinta Al-Qur&apos;an dan berprestasi.
           </p>
         </div>
       </section>
@@ -46,6 +85,12 @@ export default function PPDBPage() {
             <FileText className="w-5 h-5 text-[#0F5E4A] dark:text-emerald-400" />
             Formulir Pendaftaran Online
           </h2>
+
+          {errorMsg && (
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 rounded-xl text-sm">
+              {errorMsg}
+            </div>
+          )}
 
           {submitted ? (
             <div className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 p-6 rounded-xl text-center">
@@ -65,7 +110,7 @@ export default function PPDBPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap Santri</label>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap Santri *</label>
                   <input
                     type="text"
                     required
@@ -76,10 +121,9 @@ export default function PPDBPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">NISN</label>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">NISN (Opsional)</label>
                   <input
                     type="text"
-                    required
                     value={formData.nisn}
                     onChange={(e) => setFormData({ ...formData, nisn: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-transparent text-sm text-gray-900 dark:text-white focus:outline-none focus:border-[#0F5E4A]"
@@ -90,18 +134,18 @@ export default function PPDBPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Jenis Kelamin</label>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Jenis Kelamin *</label>
                   <select
                     value={formData.gender}
                     onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-[#0F5E4A]"
                   >
-                    <option value="L">Laki-laki (Santriwan)</option>
-                    <option value="P">Perempuan (Santriwati)</option>
+                    <option value="Laki-laki">Laki-laki (Santriwan)</option>
+                    <option value="Perempuan">Perempuan (Santriwati)</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Pilihan Program</label>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Pilihan Program *</label>
                   <select
                     value={formData.program}
                     onChange={(e) => setFormData({ ...formData, program: e.target.value })}
@@ -109,14 +153,14 @@ export default function PPDBPage() {
                   >
                     <option value="MTs">Madrasah Tsanawiyah (MTs)</option>
                     <option value="MA">Madrasah Aliyah (MA)</option>
-                    <option value="Tahfizh">Takhasus Tahfizh Al-Qur'an</option>
+                    <option value="Tahfizh">Takhasus Tahfizh Al-Qur&apos;an</option>
                   </select>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Orang Tua / Wali</label>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Orang Tua / Wali *</label>
                   <input
                     type="text"
                     required
@@ -127,7 +171,7 @@ export default function PPDBPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">No. WhatsApp Aktif</label>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">No. WhatsApp Aktif *</label>
                   <input
                     type="tel"
                     required
@@ -140,7 +184,7 @@ export default function PPDBPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Alamat Lengkap</label>
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Alamat Lengkap *</label>
                 <textarea
                   rows={3}
                   required
@@ -153,10 +197,20 @@ export default function PPDBPage() {
 
               <button
                 type="submit"
-                className="w-full py-3 px-6 bg-[#0F5E4A] text-white font-semibold text-sm rounded-xl hover:bg-[#0F5E4A]/90 transition-all flex items-center justify-center gap-2 shadow-sm"
+                disabled={loading}
+                className="w-full py-3 px-6 bg-[#0F5E4A] text-white font-semibold text-sm rounded-xl hover:bg-[#0F5E4A]/90 transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-50 cursor-pointer"
               >
-                <Send className="w-4 h-4" />
-                Kirim Formulir Pendaftaran
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Mengirim Data...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Kirim Formulir Pendaftaran
+                  </>
+                )}
               </button>
             </form>
           )}
