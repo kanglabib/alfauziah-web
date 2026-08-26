@@ -25,7 +25,7 @@ export default function Footer() {
               <Instagram className="w-5 h-5" />
             </a>
             <a
-              href="https://youtube.com/@alfauziah" // Ganti sesuai channel YouTube pondok
+              href="https://youtube.com/@afofficial.1"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="YouTube"
