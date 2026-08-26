@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { User } from '@supabase/supabase-js';
 
 export default function AdminDashboardPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   // State Form Berita
@@ -20,7 +21,6 @@ export default function AdminDashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Cek apakah admin sudah login
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -47,7 +47,6 @@ export default function AdminDashboardPage() {
     try {
       let imageUrl = '';
 
-      // 1. Upload Gambar jika ada
       if (imageFile) {
         const fileExt = imageFile.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
@@ -59,7 +58,6 @@ export default function AdminDashboardPage() {
 
         if (uploadError) throw uploadError;
 
-        // Dapatkan Public URL Gambar
         const { data: publicUrlData } = supabase.storage
           .from('berita-images')
           .getPublicUrl(filePath);
@@ -67,13 +65,12 @@ export default function AdminDashboardPage() {
         imageUrl = publicUrlData.publicUrl;
       }
 
-      // 2. Buat Slug unik dari Judul
-      const slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)+/g, '') + `-${Date.now()}`;
+      const slug =
+        title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)+/g, '') + `-${Date.now()}`;
 
-      // 3. Simpan data berita ke Tabel Posts Supabase
       const { error: insertError } = await supabase.from('posts').insert([
         {
           title,
@@ -89,13 +86,13 @@ export default function AdminDashboardPage() {
       if (insertError) throw insertError;
 
       setMessage({ type: 'success', text: 'Berita berhasil diterbitkan!' });
-      // Reset Form
       setTitle('');
       setExcerpt('');
       setContent('');
       setImageFile(null);
-    } catch (err: any) {
-      setMessage({ type: 'error', text: err.message || 'Gagal menerbitkan berita.' });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Gagal menerbitkan berita.';
+      setMessage({ type: 'error', text: errorMessage });
     } finally {
       setIsSubmitting(false);
     }
@@ -111,7 +108,6 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar Admin */}
       <nav className="bg-emerald-900 text-white px-6 py-4 flex justify-between items-center shadow-md">
         <h1 className="text-xl font-bold">Dashboard Admin Pesantren</h1>
         <div className="flex items-center gap-4">
