@@ -71,10 +71,10 @@ export default function Navbar() {
             </div>
             <div>
               <div className={`font-serif font-bold text-sm lg:text-base leading-tight transition-colors ${isScrolled ? 'text-[#0F5E4A] dark:text-emerald-400' : 'text-white'}`}>
-                Al Fauziah
+                Al FAUZIAH
               </div>
               <div className={`text-[10px] lg:text-xs leading-tight transition-colors ${isScrolled ? 'text-gray-500 dark:text-gray-400' : 'text-white/80'}`}>
-                Pondok Pesantren
+                PONDOK PESANTREN
               </div>
             </div>
           </Link>
