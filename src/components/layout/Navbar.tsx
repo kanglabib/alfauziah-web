@@ -7,17 +7,10 @@ import { Menu, X, ChevronDown, Moon, Sun, UserPlus } from 'lucide-react';
 import { NAV_ITEMS } from '@/lib/constants';
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem('theme');
@@ -49,13 +42,7 @@ export default function Navbar() {
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/95 dark:bg-gray-950/95 backdrop-blur-md shadow-md border-b border-gray-100 dark:border-gray-800'
-          : 'bg-[#0F5E4A] text-white'
-      }`}
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-950/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-sm transition-colors">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo Resmi */}
@@ -70,10 +57,10 @@ export default function Navbar() {
               />
             </div>
             <div>
-              <div className={`font-serif font-bold text-sm lg:text-base leading-tight transition-colors ${isScrolled ? 'text-[#0F5E4A] dark:text-emerald-400' : 'text-white'}`}>
+              <div className="font-serif font-bold text-sm lg:text-base leading-tight text-[#0F5E4A] dark:text-emerald-400">
                 AL FAUZIAH
               </div>
-              <div className={`text-[10px] lg:text-xs leading-tight transition-colors ${isScrolled ? 'text-gray-500 dark:text-gray-400' : 'text-white/80'}`}>
+              <div className="text-[10px] lg:text-xs leading-tight text-gray-500 dark:text-gray-400">
                 Pondok Pesantren
               </div>
             </div>
@@ -86,11 +73,7 @@ export default function Navbar() {
                 {item.children ? (
                   <button
                     onClick={() => setActiveDropdown(activeDropdown === item.label ? null : item.label)}
-                    className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                      isScrolled
-                        ? 'text-gray-700 dark:text-gray-200 hover:text-[#0F5E4A] dark:hover:text-emerald-400 hover:bg-[#0F5E4A]/5'
-                        : 'text-white/90 hover:text-white hover:bg-white/10'
-                    }`}
+                    className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-[#0F5E4A] dark:hover:text-emerald-400 hover:bg-[#0F5E4A]/5 transition-all"
                   >
                     {item.label}
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeDropdown === item.label ? 'rotate-180' : ''}`} />
@@ -98,11 +81,7 @@ export default function Navbar() {
                 ) : (
                   <Link
                     href={item.href}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                      isScrolled
-                        ? 'text-gray-700 dark:text-gray-200 hover:text-[#0F5E4A] dark:hover:text-emerald-400 hover:bg-[#0F5E4A]/5'
-                        : 'text-white/90 hover:text-white hover:bg-white/10'
-                    }`}
+                    className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-[#0F5E4A] dark:hover:text-emerald-400 hover:bg-[#0F5E4A]/5 transition-all"
                   >
                     {item.label}
                   </Link>
@@ -144,11 +123,7 @@ export default function Navbar() {
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleDark}
-              className={`p-2 rounded-lg transition-all ${
-                isScrolled
-                  ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
-              }`}
+              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
               aria-label="Toggle dark mode"
             >
               {isDark ? <Sun className="w-4 h-4 text-[#D4AF37]" /> : <Moon className="w-4 h-4" />}
@@ -157,11 +132,7 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className={`lg:hidden p-2 rounded-lg transition-all ${
-                isScrolled
-                  ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
-              }`}
+              className="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
               aria-label="Toggle menu"
             >
               {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
