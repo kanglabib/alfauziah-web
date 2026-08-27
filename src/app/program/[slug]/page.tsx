@@ -1,11 +1,10 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { BookOpen, Award, GraduationCap, CheckCircle2, ArrowLeft, Image as ImageIcon, Sparkles } from 'lucide-react';
 
-// Data Detail Masing-Masing Program + Galeri Foto
+// 1. Data Detail Masing-Masing Program
 const PROGRAM_DATA: Record<string, {
   title: string;
   badge: string;
@@ -74,21 +73,33 @@ const PROGRAM_DATA: Record<string, {
   }
 };
 
-export default function ProgramDetailPage() {
-  const params = useParams();
-  const slug = params?.slug as string;
+type Props = {
+  params: Promise<{ slug: string }>;
+};
 
-  const data = PROGRAM_DATA[slug];
+// 2. Fungsi SEO Dinamis (Membuat Judul & Deskripsi Khusus untuk Google)
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const resolvedParams = await params;
+  const data = PROGRAM_DATA[resolvedParams.slug];
 
   if (!data) {
-    return (
-      <div className="pt-32 pb-16 text-center">
-        <h1 className="text-2xl font-bold text-gray-800">Program Tidak Ditemukan</h1>
-        <Link href="/program" className="mt-4 inline-block text-[#0F5E4A] font-bold">
-          ← Kembali ke Semua Program
-        </Link>
-      </div>
-    );
+    return { title: 'Program Tidak Ditemukan' };
+  }
+
+  return {
+    title: `${data.title} | Pesantren Al-Fauziah Bogor`,
+    description: data.desc,
+    keywords: [data.title, 'Pesantren di Bogor', 'PPDB Al Fauziah', 'Pendidikan Islam Bogor'],
+  };
+}
+
+// 3. Komponen Halaman Utama (Server Component)
+export default async function ProgramDetailPage({ params }: Props) {
+  const resolvedParams = await params;
+  const data = PROGRAM_DATA[resolvedParams.slug];
+
+  if (!data) {
+    notFound();
   }
 
   return (
