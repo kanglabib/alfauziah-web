@@ -1,20 +1,16 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+const geistSans = Geist({
   variable: "--font-geist-sans",
-  weight: "100 900",
+  subsets: ["latin"],
 });
 
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  weight: "100 900",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -53,11 +49,9 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen`}
       >
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        {children}
         <Analytics />
       </body>
     </html>
