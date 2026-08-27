@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -8,6 +10,7 @@ const geistSans = localFont({
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -15,15 +18,17 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://alfauziah-web.vercel.app"),
   title: {
-    default: "Pondok Pesantren Al-Fauziah | SMP Islam & Pesantren Bogor",
+    default: "Pondok Pesantren Al-Fauziah | SMP Islam Al-Fauziah | MA Al-Fauziah",
     template: "%s | Pondok Pesantren Al-Fauziah",
   },
   description:
     "Website Resmi Pondok Pesantren Al-Fauziah & SMP Islam Al-Fauziah Bogor. Informasi pendaftaran santri baru (PPDB), program tahfizh, dan warta kegiatan.",
   keywords: [
     "Pondok Pesantren Al-Fauziah",
-    "SMP Islam Al Fauziah",
+    "SMP Islam Al-Fauziah",
+    "MA Al-Fauziah",
     "Pesantren di Bogor",
     "PPDB Pesantren Bogor",
     "Sekolah Islam Bogor",
@@ -48,9 +53,11 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
       >
-        {children}
+        <Navbar />
+        <main className="flex-grow">{children}</main>
+        <Footer />
         <Analytics />
       </body>
     </html>
