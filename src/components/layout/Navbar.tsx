@@ -50,7 +50,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center group">
             <div className="relative h-9 lg:h-11 w-44 lg:w-56 shrink-0 group-hover:scale-105 transition-transform">
               <Image
-                src="/logo-alfauziah.png"
+                src="/logo-alfauziah-new.png"
                 alt="Pondok Pesantren Al Fauziah Cimanggu Bogor"
                 fill
                 className="object-contain object-left"
